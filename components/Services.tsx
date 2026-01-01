@@ -33,9 +33,9 @@ const servicesData: Record<ServiceType, ServiceContent> = {
     'Social': {
         title: 'Social Edits',
         description: 'Fast-paced edits designed to stop the scroll.',
-        image: 'https://img.youtube.com/vi/3n1fQV0ZoA4/maxresdefault.jpg',
-        youtubeId: '3n1fQV0ZoA4',
-        isShorts: true
+        image: 'https://img.youtube.com/vi/f3jEEymB4M0/maxresdefault.jpg',
+        youtubeId: 'f3jEEymB4M0'
+        // isShorts removed for landscape video
     }
 };
 
