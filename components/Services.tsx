@@ -119,16 +119,7 @@ export const Services: React.FC = () => {
                             {servicesData[activeService].description}
                         </p>
 
-                        {/* Credits for Social Edits */}
-                        {activeService === 'Social' && (
-                            <div className="mt-6 border-l-2 border-white pl-4">
-                                <p className="font-display text-sm md:text-base uppercase leading-relaxed tracking-wider">
-                                    Edited by Cait<br />
-                                    <span className="text-[10px] font-bold tracking-widest block my-1 opacity-80">in Partnership with</span>
-                                    <span className="font-bold text-lg md:text-xl">VisualSyncMedia</span>
-                                </p>
-                            </div>
-                        )}
+
                     </div>
 
                 </div>
