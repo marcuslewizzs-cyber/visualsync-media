@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
 
             {/* Content Container */}
             <div className="relative z-20 flex flex-col w-full">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
+                <div className="flex flex-row justify-between items-end mb-12">
                     <div>
                         <Link to="/" className="block">
                             <h1 className="font-display text-[13vw] leading-none tracking-tighter select-none text-vs-black hover:text-vs-red transition-colors duration-500 cursor-pointer">
@@ -24,11 +24,11 @@ export const Footer: React.FC = () => {
                             </h1>
                         </Link>
                     </div>
-                    <div className="flex flex-col space-y-2 md:text-right mt-8 md:mt-0 pb-4">
-                        <a href="https://www.facebook.com/share/1SkXM5T2EV/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="font-display text-3xl uppercase text-vs-black hover:text-vs-red hover:underline decoration-2 underline-offset-4 transition-colors">Facebook</a>
-                        <a href="https://www.instagram.com/visualsyncmedia?igsh=aGJ5NWlnbDV4angx" target="_blank" rel="noopener noreferrer" className="font-display text-3xl uppercase text-vs-black hover:text-vs-red hover:underline decoration-2 underline-offset-4 transition-colors">Instagram</a>
-                        <a href="https://x.com/visualsyncsa" target="_blank" rel="noopener noreferrer" className="font-display text-3xl uppercase text-vs-black hover:text-vs-red hover:underline decoration-2 underline-offset-4 transition-colors">Twitter / X</a>
-                        <a href="https://www.linkedin.com/company/visualsyncmedia/" target="_blank" rel="noopener noreferrer" className="font-display text-3xl uppercase text-vs-black hover:text-vs-red hover:underline decoration-2 underline-offset-4 transition-colors">LinkedIn</a>
+                    <div className="flex flex-col space-y-2 text-right pb-4">
+                        <a href="https://www.facebook.com/share/1SkXM5T2EV/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="font-display text-lg md:text-3xl uppercase text-vs-black hover:text-vs-red hover:underline decoration-2 underline-offset-4 transition-colors">Facebook</a>
+                        <a href="https://www.instagram.com/visualsyncmedia?igsh=aGJ5NWlnbDV4angx" target="_blank" rel="noopener noreferrer" className="font-display text-lg md:text-3xl uppercase text-vs-black hover:text-vs-red hover:underline decoration-2 underline-offset-4 transition-colors">Instagram</a>
+                        <a href="https://x.com/visualsyncsa" target="_blank" rel="noopener noreferrer" className="font-display text-lg md:text-3xl uppercase text-vs-black hover:text-vs-red hover:underline decoration-2 underline-offset-4 transition-colors">Twitter / X</a>
+                        <a href="https://www.linkedin.com/company/visualsyncmedia/" target="_blank" rel="noopener noreferrer" className="font-display text-lg md:text-3xl uppercase text-vs-black hover:text-vs-red hover:underline decoration-2 underline-offset-4 transition-colors">LinkedIn</a>
                     </div>
                 </div>
 
