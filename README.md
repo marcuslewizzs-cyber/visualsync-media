@@ -15,11 +15,14 @@ npm run dev
 ## 🔐 Supabase Setup
 
 1. Create a project at [supabase.com](https://supabase.com)
-2. Add your credentials to `.env.local`:
+2. Add your credentials to `.env.local` or in Vercel Project Settings (Environment Variables):
 
 ```env
+# Local development (client-exposed vars must begin with VITE_)
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# In Vercel, set the same names (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY) under Project Settings → Environment Variables
 ```
 
 3. Create the following table in Supabase SQL Editor:
