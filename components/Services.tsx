@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Play } from 'lucide-react';
 
-type ServiceType = 'Talking Heads' | 'Audio/Visual' | 'Long Form' | 'Social';
+type ServiceType = 'Talking Heads' | 'YouTube Intro' | 'Long Form' | 'Social';
 
 interface ServiceContent {
     title: string;
@@ -18,11 +18,11 @@ const servicesData: Record<ServiceType, ServiceContent> = {
         image: 'https://img.youtube.com/vi/k0PiAlIeJWA/maxresdefault.jpg',
         youtubeId: 'k0PiAlIeJWA'
     },
-    'Audio/Visual': {
-        title: 'Music Videos',
+    'YouTube Intro': {
+        title: 'YouTube Intro',
         description: 'Cinematic visuals that match your sonic identity.',
-        image: 'https://img.youtube.com/vi/90Bkyn2zIf0/maxresdefault.jpg',
-        youtubeId: '90Bkyn2zIf0'
+        image: 'https://img.youtube.com/vi/39Xp0albsMY/maxresdefault.jpg',
+        youtubeId: '39Xp0albsMY'
     },
     'Long Form': {
         title: 'Documentaries',
@@ -33,8 +33,8 @@ const servicesData: Record<ServiceType, ServiceContent> = {
     'Social': {
         title: 'Social Edits',
         description: 'Fast-paced edits designed to stop the scroll.',
-        image: '/images/social.jpg',
-        youtubeId: 'oPagDf0WPCg',
+        image: 'https://img.youtube.com/vi/3n1fQV0ZoA4/maxresdefault.jpg',
+        youtubeId: '3n1fQV0ZoA4',
         isShorts: true
     }
 };
