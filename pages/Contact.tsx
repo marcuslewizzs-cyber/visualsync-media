@@ -176,13 +176,13 @@ export const Contact: React.FC = () => {
                             <h2 className="font-display text-4xl uppercase mb-8">Contact Info</h2>
 
                             <div className="space-y-6">
-                                <a href="mailto:visualsyncmedia@gmail.com" className="flex items-center gap-4 group">
+                                <a href="mailto:Contact.visualsyncmedia@gmail.com" className="flex items-center gap-4 group">
                                     <div className="w-12 h-12 bg-vs-black text-white flex items-center justify-center group-hover:bg-vs-red transition-colors">
                                         <Mail size={20} />
                                     </div>
                                     <div>
                                         <span className="block text-sm uppercase tracking-widest text-gray-500">Email</span>
-                                        <span className="font-display text-xl group-hover:text-vs-red transition-colors">visualsyncmedia@gmail.com</span>
+                                        <span className="font-display text-xl group-hover:text-vs-red transition-colors">Contact.visualsyncmedia@gmail.com</span>
                                     </div>
                                 </a>
 
