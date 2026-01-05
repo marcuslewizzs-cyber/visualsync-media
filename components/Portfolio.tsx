@@ -5,7 +5,7 @@ import { Camera, Zap, Mic, Monitor, ArrowUpRight, X } from 'lucide-react';
 import DomeGallery from './DomeGallery';
 
 const clients = [
-  "Showmax", "Superpicks", "Youngins", "The Travel Boss", "GT Gaming Lounge", "The Strawhat Group", "PLUC", "Cash n Sport", "OS Clinic", "Trade House Media"
+  "Showmax", "Superpicks", "Youngins", "The Travel Boss", "GT Gaming Lounge", "The Strawhat Group", "PLUC", "Cash n Sport", "Trade House Media", "22Ours"
 ];
 
 const equipmentTags = [
@@ -47,8 +47,7 @@ const extraProjects: Project[] = [
   { id: 17, title: "Selected Work 17", image: "https://img.youtube.com/vi/csG5igN55IY/maxresdefault.jpg", type: 'youtube', videoId: "csG5igN55IY" },
   { id: 18, title: "Selected Work 18", image: "https://img.youtube.com/vi/B_4MW_2HVz4/maxresdefault.jpg", type: 'youtube', videoId: "B_4MW_2HVz4" },
   { id: 19, title: "Selected Work 19", image: "https://img.youtube.com/vi/ytxEUIcqW6Y/maxresdefault.jpg", type: 'youtube', videoId: "ytxEUIcqW6Y" },
-  { id: 20, title: "Selected Work 20", image: "https://img.youtube.com/vi/s3uO2hI9u2U/maxresdefault.jpg", type: 'youtube', videoId: "s3uO2hI9u2U" },
-  { id: 21, title: "Selected Work 21", image: "https://img.youtube.com/vi/_A0AijhG8oM/maxresdefault.jpg", type: 'youtube', videoId: "_A0AijhG8oM" },
+
   { id: 22, title: "Talking Heads", image: "https://img.youtube.com/vi/k0PiAlIeJWA/maxresdefault.jpg", type: 'youtube', videoId: "k0PiAlIeJWA" },
   { id: 23, title: "Music Video", image: "https://img.youtube.com/vi/90Bkyn2zIf0/maxresdefault.jpg", type: 'youtube', videoId: "90Bkyn2zIf0" },
   { id: 24, title: "Documentary", image: "https://img.youtube.com/vi/8yV4j6-Ox6I/maxresdefault.jpg", type: 'youtube', videoId: "8yV4j6-Ox6I" },
