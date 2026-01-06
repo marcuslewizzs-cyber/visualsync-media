@@ -5,7 +5,7 @@ import { Camera, Zap, Mic, Monitor, ArrowUpRight, X } from 'lucide-react';
 import DomeGallery from './DomeGallery';
 
 const clients = [
-  "Showmax", "Superpicks", "Youngins", "The Travel Boss", "GT Gaming Lounge", "The Strawhat Group", "PLUC", "Cash n Sport", "Trade House Media", "22Ours"
+  "Showmax", "Superpicks", "Youngins", "The Travel Boss", "GT Gaming Lounge", "The Strawhat Group", "PLUC", "Cash n Sport", "22Ours"
 ];
 
 const equipmentTags = [
