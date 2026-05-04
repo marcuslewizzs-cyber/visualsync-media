@@ -110,7 +110,7 @@ export const Services: React.FC = () => {
                     {/* Bottom Info - Brutalist Plain Text */}
                     <div className={`absolute bottom-0 left-0 p-8 md:p-12 max-w-2xl pointer-events-none text-white z-20 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}>
                         <span className="block text-[10px] uppercase tracking-[0.4em] mb-4 border-l-2 border-white pl-4 mix-blend-difference">
-                            Collection 0{Object.keys(servicesData).indexOf(activeService) + 1}
+                            Collection
                         </span>
                         <h2 className="font-display text-6xl md:text-8xl w-full uppercase leading-[0.85] tracking-tight mb-6 break-words mix-blend-difference">
                             {servicesData[activeService].title}
@@ -175,9 +175,7 @@ export const Services: React.FC = () => {
                                         </span>
 
                                         <div className="text-right">
-                                            <div className={`font-mono text-[10px] mb-1 block ${activeService === item ? 'text-vs-red' : ''} ${isFirstItem ? 'text-gray-400' : 'text-gray-600'}`}>
-                                                (0{index + 1})
-                                            </div>
+
                                             <span className={`font-display text-2xl md:text-3xl uppercase leading-none block transition-colors ${activeService === item ? 'text-vs-red scale-105 origin-right' : ''} ${isFirstItem ? 'text-white' : 'text-vs-black group-hover:text-vs-red'}`}>
                                                 {item}
                                             </span>

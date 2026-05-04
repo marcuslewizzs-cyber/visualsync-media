@@ -51,7 +51,11 @@ const extraProjects: Project[] = [
   { id: 22, title: "Talking Heads", image: "https://img.youtube.com/vi/k0PiAlIeJWA/maxresdefault.jpg", type: 'youtube', videoId: "k0PiAlIeJWA" },
   { id: 23, title: "Music Video", image: "https://img.youtube.com/vi/90Bkyn2zIf0/maxresdefault.jpg", type: 'youtube', videoId: "90Bkyn2zIf0" },
   { id: 24, title: "Documentary", image: "https://img.youtube.com/vi/8yV4j6-Ox6I/maxresdefault.jpg", type: 'youtube', videoId: "8yV4j6-Ox6I" },
-  { id: 25, title: "Social Edit", image: "https://img.youtube.com/vi/oPagDf0WPCg/maxresdefault.jpg", type: 'youtube', videoId: "oPagDf0WPCg" }
+  { id: 25, title: "Social Edit", image: "https://img.youtube.com/vi/oPagDf0WPCg/maxresdefault.jpg", type: 'youtube', videoId: "oPagDf0WPCg" },
+  { id: 26, title: "Selected Work 20", image: "https://img.youtube.com/vi/DsQkQRGPYf4/maxresdefault.jpg", type: 'youtube', videoId: "DsQkQRGPYf4" },
+  { id: 27, title: "Selected Work 21", image: "https://img.youtube.com/vi/sr_aoduahv0/maxresdefault.jpg", type: 'youtube', videoId: "sr_aoduahv0" },
+  { id: 28, title: "Selected Work 22", image: "https://img.youtube.com/vi/cP4TchRcvRQ/maxresdefault.jpg", type: 'youtube', videoId: "cP4TchRcvRQ" },
+  { id: 29, title: "Selected Work 23", image: "https://img.youtube.com/vi/FB1Gr7LEMJw/maxresdefault.jpg", type: 'youtube', videoId: "FB1Gr7LEMJw" }
 ];
 
 export const Portfolio: React.FC = () => {
