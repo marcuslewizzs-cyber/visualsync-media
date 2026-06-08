@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_7" data-name="Layer 7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: 2.24em;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        font-family: SourceSans3Roman-Black, 'Source Sans 3 VF';
+        font-size: 60px;
+        font-variation-settings: 'wght' 900;
+        font-weight: 800;
+      }
+
+      .cls-4 {
+        letter-spacing: 2.24em;
+      }
+
+      .cls-5 {
+        fill: none;
+        stroke: #f05025;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+
+      .cls-6 {
+        letter-spacing: 2.24em;
+      }
+
+      .cls-7 {
+        letter-spacing: 2.24em;
+      }
+
+      .cls-8 {
+        fill: #f05025;
+        font-family: AcuminConcept-Semibold, 'Acumin Variable Concept';
+        font-size: 19.3px;
+        font-variation-settings: 'wght' 600, 'wdth' 100, 'slnt' 0;
+        font-weight: 600;
+      }
+
+      .cls-9 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-10 {
+        letter-spacing: 2.24em;
+      }
+
+      .cls-11 {
+        letter-spacing: -.01em;
+      }
+    </style>
+  </defs>
+  <text class="cls-3" transform="translate(141.24 335.53)"><tspan x="0" y="0">VIS</tspan><tspan class="cls-11" x="87.12" y="0">U</tspan><tspan x="126.84" y="0">AL </tspan><tspan class="cls-9" x="205.68" y="0">S</tspan><tspan x="238.32" y="0">YNC</tspan></text>
+  <text class="cls-8" transform="translate(193.79 381.38)"><tspan class="cls-7" x="0" y="0">M</tspan><tspan class="cls-6" x="60.28" y="0">E</tspan><tspan class="cls-4" x="115.28" y="0">D</tspan><tspan class="cls-10" x="172.62" y="0">I</tspan><tspan class="cls-1" x="221.67" y="0">A</tspan></text>
+  <polygon class="cls-5" points="265.38 153.77 240.83 153.77 309.41 273.77 336.28 227 306.65 174.93 312.16 174.93 339.04 221.92 350.89 202.66 323.8 153.77 271.31 153.77 311.95 226.57 309.62 230.17 265.38 153.77"/>
+  <polygon class="cls-2" points="328.24 153.77 353.64 197.79 379.04 153.77 328.24 153.77"/>
+</svg>

@@ -1,0 +1,37 @@
+# Environment Configuration Template
+# Copy this content to .env.local and fill in your actual values
+# DO NOT commit .env.local to git - it contains secrets!
+
+# ===========================================
+# Clerk Authentication
+# Get these from https://dashboard.clerk.com
+# ===========================================
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key
+CLERK_SECRET_KEY=sk_test_your_secret_key
+
+# ===========================================
+# Convex Database
+# Get this from https://dashboard.convex.dev after running 'npx convex dev'
+# ===========================================
+CONVEX_URL=https://your-deployment.convex.cloud
+NEXT_PUBLIC_CONVEX_URL=https://your-deployment.convex.cloud
+
+# ===========================================
+# Clerk Webhook Secret
+# Get this from Clerk Dashboard > Webhooks after adding a webhook endpoint
+# The endpoint should be: https://yourdomain.com/api/webhooks/clerk
+# ===========================================
+CLERK_WEBHOOK_SECRET=whsec_your_webhook_secret
+
+# ===========================================
+# Setup Instructions:
+# ===========================================
+# 1. Create Clerk account at https://clerk.dev
+# 2. Create a new application in Clerk dashboard
+# 3. Copy the Publishable Key and Secret Key above
+# 4. Create Convex account at https://convex.dev  
+# 5. Run: npx convex dev (to get your CONVEX_URL)
+# 6. In Clerk dashboard, add webhook endpoint:
+#    URL: https://yourdomain.com/api/webhooks/clerk
+#    Events: user.created, user.updated
+# 7. Copy the webhook signing secret above
