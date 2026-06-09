@@ -100,7 +100,8 @@ export default defineSchema({
         createdAt: v.number(),
     })
         .index("by_orderId", ["orderId"])
-        .index("by_projectId", ["projectId"]),
+        .index("by_projectId", ["projectId"])
+        .index("by_senderId", ["senderId"]),
 
     // Project Tasks - granular tasks within a project
     tasks: defineTable({

@@ -259,12 +259,12 @@ export const getTeamOverview = query({
                 // Get the most recent message by this editor
                 const recentMessage = await ctx.db
                     .query("messages")
-                    .withIndex("by_userId", (q) => q.eq("userId", editor.userId))
+                    .withIndex("by_senderId", (q) => q.eq("senderId", editor.userId))
                     .order("desc")
                     .first()
 
                 let recentProjectName = null
-                if (recentMessage) {
+                if (recentMessage && recentMessage.projectId) {
                     const project = await ctx.db.get(recentMessage.projectId)
                     recentProjectName = project?.title
                 }
