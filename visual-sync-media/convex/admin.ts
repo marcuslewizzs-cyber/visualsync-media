@@ -135,14 +135,45 @@ export const getDashboardStats = query({
         const activeProjectsCount = allProjects.filter(p => p.status !== "done").length
         const totalProduced = allProjects.filter(p => p.status === "done").length
 
+        // Missed deadlines: active projects whose dueDate has passed
+        const now = Date.now()
+        const todayStr = new Date().toISOString().split("T")[0]
+        const threeDaysLater = new Date()
+        threeDaysLater.setDate(threeDaysLater.getDate() + 3)
+        const threeDaysStr = threeDaysLater.toISOString().split("T")[0]
+
+        const missedDeadlines = allProjects.filter(p => {
+            if (p.status === "done") return false
+            if (!p.dueDate) return false
+            return new Date(p.dueDate).getTime() < now
+        }).length
+
+        // Due soon: active projects with dueDate within the next 3 days (not overdue)
+        const dueSoonCount = allProjects.filter(p => {
+            if (p.status === "done") return false
+            if (!p.dueDate) return false
+            return p.dueDate >= todayStr && p.dueDate <= threeDaysStr
+        }).length
+
+        // On-time delivery: % of completed projects that hit their deadline
+        const completedWithDue = allProjects.filter(p => p.status === "done" && p.dueDate)
+        const onTimeCount = completedWithDue.filter(p => {
+            // updatedAt is when the project was last changed (i.e. marked done)
+            return p.updatedAt <= new Date(p.dueDate!).setHours(23, 59, 59, 999)
+        }).length
+        const onTimeDelivery = completedWithDue.length > 0
+            ? Math.round((onTimeCount / completedWithDue.length) * 100)
+            : 100
+
         return {
             totalRevenue,
             pendingApprovals,
             awaitingQuotes,
             activeProjectsCount,
             totalProduced,
-            onTimeDelivery: 92, // Mock for now
-            missedDeadlines: 1, // Mock for now
+            onTimeDelivery,
+            missedDeadlines,
+            dueSoonCount,
         }
     },
 })
@@ -186,6 +217,72 @@ export const getDashboardProjects = query({
                     assigneeDetails: assignees.filter(Boolean),
                     lastMessage: lastMessage?.content || "No messages yet",
                     lastMessageAt: lastMessage?.createdAt || p.createdAt
+                }
+            })
+        )
+    },
+})
+
+// Get team overview for the dashboard
+export const getTeamOverview = query({
+    args: {},
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) return []
+
+        const user = await ctx.db
+            .query("users")
+            .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+            .unique()
+
+        if (!user || user.role !== "admin") return []
+
+        const editors = await ctx.db
+            .query("editors")
+            .filter((q) => q.eq(q.field("isActive"), true))
+            .collect()
+
+        return await Promise.all(
+            editors.map(async (editor) => {
+                const u = await ctx.db.get(editor.userId)
+                
+                // Get active projects assigned to this editor
+                const activeProjects = await ctx.db
+                    .query("projects")
+                    .filter((q) => q.neq(q.field("status"), "done"))
+                    .collect()
+                    
+                const editorProjects = activeProjects.filter(p => 
+                    p.assigneeIds.includes(editor.userId)
+                )
+
+                // Get the most recent message by this editor
+                const recentMessage = await ctx.db
+                    .query("messages")
+                    .withIndex("by_userId", (q) => q.eq("userId", editor.userId))
+                    .order("desc")
+                    .first()
+
+                let recentProjectName = null
+                if (recentMessage) {
+                    const project = await ctx.db.get(recentMessage.projectId)
+                    recentProjectName = project?.title
+                }
+
+                return {
+                    id: editor._id,
+                    userId: u?._id,
+                    name: u?.name || "Unknown",
+                    avatar: u?.image || `/avatars/01.png`,
+                    role: editor.specialties && editor.specialties.length > 0 
+                        ? editor.specialties.join(", ") 
+                        : "Editor",
+                    activeProjectsCount: editorProjects.length,
+                    lastUpdated: editorProjects.length > 0 
+                        ? Math.max(...editorProjects.map(p => p.updatedAt)) 
+                        : (u?.updatedAt || Date.now()),
+                    recentMessage: recentMessage?.content || "No recent activity",
+                    recentProjectName: recentProjectName || "N/A"
                 }
             })
         )

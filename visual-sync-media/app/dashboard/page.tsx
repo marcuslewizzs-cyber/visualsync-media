@@ -275,6 +275,7 @@ export default function DashboardPage() {
     const stats = useQuery(api.admin.getDashboardStats)
     const liveProjects = useQuery(api.admin.getDashboardProjects) || []
     const pendingOrders = useQuery(api.orders.getPendingOrders) || []
+    const teamOverview = useQuery(api.admin.getTeamOverview) || []
     
     const [forwardingRequest, setForwardingRequest] = useState<any>(null)
     const [selectedProject, setSelectedProject] = useState<any>(null)
@@ -359,18 +360,26 @@ export default function DashboardPage() {
                                         <Clock className="h-4 w-4 text-orange-500" />
                                     </div>
                                     <div className="flex items-end justify-between">
-                                        <div className="text-3xl font-bold">{stats?.pendingApprovals || 0}</div>
-                                        <div className="flex -space-x-2">
-                                            {[1, 2, 3].map((i) => (
-                                                <Avatar key={i} className="h-8 w-8 border-2 border-background">
-                                                    <AvatarImage src={`/avatars/0${i}.png`} />
-                                                    <AvatarFallback>U{i}</AvatarFallback>
-                                                </Avatar>
-                                            ))}
-                                            <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted text-[10px] font-medium transition-colors hover:bg-muted/80">
-                                                +4
+                                        <div className="text-3xl font-bold">{stats?.pendingApprovals ?? 0}</div>
+                                        {(stats?.pendingApprovals ?? 0) > 0 ? (
+                                            <div className="flex -space-x-2">
+                                                {[1, 2, 3].slice(0, Math.min(stats?.pendingApprovals ?? 0, 3)).map((i) => (
+                                                    <Avatar key={i} className="h-8 w-8 border-2 border-background">
+                                                        <AvatarImage src={`/avatars/0${i}.png`} />
+                                                        <AvatarFallback>U{i}</AvatarFallback>
+                                                    </Avatar>
+                                                ))}
+                                                {(stats?.pendingApprovals ?? 0) > 3 && (
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-muted text-[10px] font-medium transition-colors hover:bg-muted/80">
+                                                        +{(stats?.pendingApprovals ?? 0) - 3}
+                                                    </div>
+                                                )}
                                             </div>
-                                        </div>
+                                        ) : (
+                                            <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-100 font-normal px-2 py-1">
+                                                All clear
+                                            </Badge>
+                                        )}
                                     </div>
                                 </div>
                             </CardContent>
@@ -380,16 +389,21 @@ export default function DashboardPage() {
                                 <div className="flex flex-col gap-4">
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm font-medium text-muted-foreground">Missed Deadlines</span>
-                                        <AlertCircle className="h-4 w-4 text-red-500" />
+                                        <AlertCircle className={`h-4 w-4 ${(stats?.missedDeadlines ?? 0) > 0 ? 'text-red-500' : 'text-muted-foreground'}`} />
                                     </div>
                                     <div className="flex items-end justify-between">
-                                        <div className="text-3xl font-bold">2</div>
-                                        <div className="flex items-center gap-2">
-                                            <Badge variant="secondary" className="bg-red-50 text-red-700 hover:bg-red-100 border-red-100 font-normal px-2 py-1">
-                                                LumenForge
-                                            </Badge>
-                                            <span className="text-xs text-muted-foreground">+1</span>
+                                        <div className={`text-3xl font-bold ${(stats?.missedDeadlines ?? 0) > 0 ? 'text-red-600' : ''}`}>
+                                            {stats?.missedDeadlines ?? 0}
                                         </div>
+                                        {(stats?.missedDeadlines ?? 0) > 0 ? (
+                                            <Badge variant="secondary" className="bg-red-50 text-red-700 hover:bg-red-100 border-red-100 font-normal px-2 py-1">
+                                                {stats!.missedDeadlines} overdue
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-100 font-normal px-2 py-1">
+                                                On track
+                                            </Badge>
+                                        )}
                                     </div>
                                 </div>
                             </CardContent>
@@ -481,7 +495,9 @@ export default function DashboardPage() {
                                         pendingOrders.slice(0, 3).map((order: any) => (
                                             <RequestItem
                                                 key={order._id}
-                                                client={order.client?.name || "Unknown"}
+                                                clientName={order.client?.name || "Unknown User"}
+                                                clientEmail={order.client?.email}
+                                                clientAvatar={order.client?.image}
                                                 request={order.title}
                                                 time={formatRelativeDate(new Date(order.createdAt).toISOString())}
                                                 details={order.requirements}
@@ -501,7 +517,7 @@ export default function DashboardPage() {
                         <h2 className="text-2xl font-bold tracking-tight">Team Overview</h2>
                     </div>
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {teamMembers.map((member) => (
+                        {teamOverview.map((member: any) => (
                             <TeamMemberCard key={member.id} member={member} />
                         ))}
                     </div>
@@ -884,16 +900,22 @@ function AvailabilityRow({ name, avatar, load, color }: any) {
     )
 }
 
-function RequestItem({ client, request, time, details, priority, onForward }: any) {
+function RequestItem({ clientName, clientEmail, clientAvatar, request, time, details, priority, onForward }: any) {
     return (
         <div className="flex gap-3 items-start group">
-            <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary mt-0.5 shrink-0">
-                {priority === 'high' ? <AlertCircle className="w-5 h-5" /> : <Bell className="w-5 h-5" />}
-            </div>
-            <div className="flex-1 space-y-1">
-                <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold">{client}</span>
-                    <span className="text-xs text-muted-foreground">{time}</span>
+            <Avatar className="h-9 w-9 border mt-0.5 shrink-0">
+                <AvatarImage src={clientAvatar} />
+                <AvatarFallback className="bg-primary/10 text-primary">
+                    {priority === 'high' ? <AlertCircle className="w-5 h-5" /> : <Bell className="w-5 h-5" />}
+                </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 space-y-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                    <div className="flex flex-col truncate">
+                        <span className="text-sm font-semibold truncate">{clientName}</span>
+                        {clientEmail && <span className="text-[10px] text-muted-foreground truncate">{clientEmail}</span>}
+                    </div>
+                    <span className="text-xs text-muted-foreground shrink-0">{time}</span>
                 </div>
                 <div className="text-sm font-medium">{request}</div>
                 <p className="text-xs text-muted-foreground leading-snug">
@@ -913,19 +935,15 @@ function RequestItem({ client, request, time, details, priority, onForward }: an
     )
 }
 
-function TeamMemberCard({ member }: { member: TeamMember }) {
-    const usagePercent = (member.hoursLogged / member.capacity) * 100
-
-    // Determine color based on usage
-    let progressColor = "bg-green-500"
-    if (usagePercent > 90) progressColor = "bg-red-500"
-    else if (usagePercent > 75) progressColor = "bg-yellow-500"
-
-    const statusColors = {
+function TeamMemberCard({ member }: { member: any }) {
+    const statusColors: any = {
         online: "bg-green-500",
         busy: "bg-red-500",
         offline: "bg-gray-300"
     }
+
+    // Default to online since we don't have real-time presence yet
+    const currentStatus = "online"
 
     return (
         <Card className="rounded-2xl border bg-card shadow-sm hover:shadow-md transition-all">
@@ -937,7 +955,7 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
                                 <AvatarImage src={member.avatar} />
                                 <AvatarFallback>{member.name[0]}</AvatarFallback>
                             </Avatar>
-                            <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-card ${statusColors[member.status]}`} />
+                            <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-card ${statusColors[currentStatus]}`} />
                         </div>
                         <div>
                             <h3 className="font-semibold text-base">{member.name}</h3>
@@ -949,19 +967,24 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
                 <div className="space-y-4">
                     <div>
                         <div className="flex justify-between text-xs mb-1.5">
-                            <span className="text-muted-foreground">Workload</span>
-                            <span className="font-medium">{member.hoursLogged}/{member.capacity}h</span>
+                            <span className="text-muted-foreground">Active Projects</span>
+                            <span className="font-medium">{member.activeProjectsCount} Projects</span>
                         </div>
-                        <Progress value={usagePercent} className={`h-2 ${progressColor.replace("bg-", "text-")}`} />
+                        <Progress value={Math.min(member.activeProjectsCount * 20, 100)} className="h-2" />
                     </div>
 
                     <div className="bg-muted/50 rounded-xl p-3 space-y-1.5">
-                        <div className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Current Focus</span>
+                        <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Recent Message</span>
+                            </div>
+                            <span className="text-[10px] text-muted-foreground">
+                                {formatRelativeDate(new Date(member.lastUpdated).toISOString())}
+                            </span>
                         </div>
-                        <p className="text-sm font-medium leading-tight">{member.currentTask}</p>
-                        <p className="text-xs text-muted-foreground">on <span className="text-foreground font-medium">{member.project}</span></p>
+                        <p className="text-sm font-medium leading-tight line-clamp-2">"{member.recentMessage}"</p>
+                        <p className="text-xs text-muted-foreground truncate">on <span className="text-foreground font-medium">{member.recentProjectName}</span></p>
                     </div>
                 </div>
             </CardContent>

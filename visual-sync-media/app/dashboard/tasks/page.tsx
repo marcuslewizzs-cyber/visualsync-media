@@ -56,6 +56,7 @@ import { cn } from "@/lib/utils"
 import { useQuery, useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
+import { DeadlineChip } from "@/components/deadline-chip"
 
 // --- Components ---
 
@@ -87,6 +88,7 @@ export default function TasksPage() {
     const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false)
     const [selectedOrderId, setSelectedOrderId] = useState<Id<"orders"> | null>(null)
     const [selectedAssignees, setSelectedAssignees] = useState<string[]>([])
+    const [createProjectDueDate, setCreateProjectDueDate] = useState<string>("")
     
     const [expandedProjectId, setExpandedProjectId] = useState<Id<"projects"> | null>(null)
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
@@ -129,12 +131,14 @@ export default function TasksPage() {
         try {
             await createProjectMutation({
                 orderId: selectedOrderId,
-                assigneeIds: selectedAssignees as Id<"users">[]
+                assigneeIds: selectedAssignees as Id<"users">[],
+                dueDate: createProjectDueDate || undefined,
             })
             console.log("Project created successfully")
             setIsCreateProjectOpen(false)
             setSelectedOrderId(null)
             setSelectedAssignees([])
+            setCreateProjectDueDate("")
             toast.success("Project created and added to production pipeline.")
         } catch (error) {
             console.error("Create project error:", error)
@@ -386,9 +390,22 @@ export default function TasksPage() {
                                         )}
 
                                         <div className="flex items-center justify-between pt-2 border-t border-muted text-xs text-muted-foreground font-medium uppercase tracking-tighter">
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-1.5">
                                                 {project.mediaSpecs.ratio === '9:16' ? <Smartphone size={12} /> : <Monitor size={12} />}
-                                                <span>{project.dueDate ? project.dueDate.split('-').slice(1).join('/') : 'N/A'}</span>
+                                                <DeadlineChip
+                                                    dueDate={project.dueDate}
+                                                    isCompleted={project.status === 'done'}
+                                                    completedAt={project.updatedAt}
+                                                    isAdmin={isAdmin}
+                                                    onSave={async (date) => {
+                                                        try {
+                                                            await updateProjectMutation({ projectId: project._id, dueDate: date })
+                                                            toast.success(date ? `Deadline set to ${date}` : "Deadline cleared")
+                                                        } catch (e) {
+                                                            toast.error("Failed to update deadline")
+                                                        }
+                                                    }}
+                                                />
                                             </div>
                                             {project.readyForClient && <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-none h-4 text-[10px]">SUBMITTED</Badge>}
                                         </div>
@@ -505,6 +522,23 @@ export default function TasksPage() {
                                     )
                                 })}
                             </div>
+                        </div>
+
+                        {/* Optional Deadline */}
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold uppercase text-muted-foreground tracking-widest">Deadline <span className="normal-case font-normal">(optional)</span></Label>
+                            <input
+                                type="date"
+                                className="w-full h-10 rounded-xl border border-input bg-muted/30 px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                value={createProjectDueDate}
+                                min={new Date().toISOString().split("T")[0]}
+                                onChange={(e) => setCreateProjectDueDate(e.target.value)}
+                            />
+                            {createProjectDueDate && (
+                                <p className="text-xs text-muted-foreground">
+                                    Deadline: <span className="font-semibold text-foreground">{new Date(createProjectDueDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                </p>
+                            )}
                         </div>
                     </div>
                     <DialogFooter>

@@ -6,6 +6,7 @@ export const createProject = mutation({
     args: {
         orderId: v.id("orders"),
         assigneeIds: v.array(v.id("users")),
+        dueDate: v.optional(v.string()), // Admin can override the order's dueDate
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
@@ -40,7 +41,7 @@ export const createProject = mutation({
             status: "todo",
             assigneeIds: args.assigneeIds,
             progress: 0,
-            dueDate: order.dueDate,
+            dueDate: args.dueDate ?? order.dueDate, // Admin override takes precedence
             driveLinks: {
                 raw: order.rawAssetsLink || "",
                 working: "",
@@ -229,6 +230,8 @@ export const updateProject = mutation({
         ),
         readyForClient: v.optional(v.boolean()),
         assigneeIds: v.optional(v.array(v.id("users"))),
+        // Admin-only: set/edit/clear project deadline
+        dueDate: v.optional(v.union(v.string(), v.null())),
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
@@ -252,8 +255,9 @@ export const updateProject = mutation({
 
         if (!isAuthorized) throw new Error("Not authorized")
 
+        const now = Date.now()
         const updates: any = {
-            updatedAt: Date.now(),
+            updatedAt: now,
         }
 
         if (args.status !== undefined) updates.status = args.status
@@ -263,7 +267,39 @@ export const updateProject = mutation({
         if (args.readyForClient !== undefined) updates.readyForClient = args.readyForClient
         if (args.assigneeIds !== undefined) updates.assigneeIds = args.assigneeIds
 
+        // dueDate is admin-only
+        if (args.dueDate !== undefined) {
+            if (user.role !== "admin") throw new Error("Only admin can set or change deadlines")
+            updates.dueDate = args.dueDate === null ? undefined : args.dueDate
+            await ctx.db.insert("activityLog", {
+                projectId: args.projectId,
+                userId: user._id,
+                action: args.dueDate === null ? "cleared_deadline" : "set_deadline",
+                details: args.dueDate === null
+                    ? `Deadline cleared`
+                    : `Deadline set to ${args.dueDate}`,
+                createdAt: now,
+            })
+        }
+
         await ctx.db.patch(args.projectId, updates)
+
+        // Write completion log when project is marked done
+        if (args.status === "done") {
+            const existingProject = await ctx.db.get(args.projectId)
+            await ctx.db.insert("activityLog", {
+                projectId: args.projectId,
+                userId: user._id,
+                action: "completed_project",
+                details: `Project marked as completed${existingProject?.dueDate
+                    ? (now <= new Date(existingProject.dueDate).getTime()
+                        ? " (on time)"
+                        : " (late)")
+                    : ""}`,
+                createdAt: now,
+            })
+        }
+
         return await ctx.db.get(args.projectId)
     },
 })

@@ -41,6 +41,7 @@ import {
 } from "lucide-react"
 import { cn, formatRelativeDate } from "@/lib/utils"
 import { ChatInterface } from "@/components/chat-interface"
+import { DeadlineChip } from "@/components/deadline-chip"
 
 const statusConfig = {
     "todo": { label: "To Do", icon: Clock, color: "bg-gray-500", badgeVariant: "secondary" as const },
@@ -219,10 +220,12 @@ export default function EditorProjectsPage() {
                                                 <User className="h-4 w-4" />
                                                 <span>{project.client?.name || 'Unknown Client'}</span>
                                             </div>
-                                            <div className="flex items-center gap-1">
-                                                <Clock className="h-4 w-4" />
-                                                <span>Due: {project.dueDate ? formatDate(project.dueDate) : 'N/A'}</span>
-                                            </div>
+                                            <DeadlineChip 
+                                                dueDate={project.dueDate} 
+                                                isCompleted={project.status === 'done'}
+                                                completedAt={project.updatedAt}
+                                                isAdmin={false} 
+                                            />
                                             <div className="flex items-center gap-1">
                                                 <MessageSquare className="h-4 w-4" />
                                                 <span>{project.internalNotes.length} notes</span>
@@ -296,8 +299,13 @@ export default function EditorProjectsPage() {
                                     <span className="font-semibold text-green-600">${selectedProject.dealValue}</span>
                                 </div>
                                 <div>
-                                    <span className="text-muted-foreground block text-[10px] uppercase font-bold">Due Date</span>
-                                    <span>{selectedProject.dueDate ? formatDate(selectedProject.dueDate) : 'N/A'}</span>
+                                    <span className="text-muted-foreground block text-[10px] uppercase font-bold mb-1">Due Date</span>
+                                    <DeadlineChip 
+                                        dueDate={selectedProject.dueDate} 
+                                        isCompleted={selectedProject.status === 'done'}
+                                        completedAt={selectedProject.updatedAt}
+                                        isAdmin={false} 
+                                    />
                                 </div>
                                 <div>
                                     <span className="text-muted-foreground block text-[10px] uppercase font-bold">Media Specs</span>
